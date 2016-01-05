@@ -14,15 +14,16 @@ $breakpoint-names: "tiny" "small" "medium" "large" "huge" "giant" "monstrous";
 
 .dc-span--demo {
     margin-bottom: $dc-space50;
-    padding: $dc-space50 / 2;
-    border: 1px solid rgba($dc-orange40, .6);
+    //padding: $dc-space50;
+    //border: 1px solid rgba($dc-orange40, .6);
     background: rgba($dc-orange60, .4);
-    color: $dc-orange20;
-    font-size: $dc-font50;
+    color: $dc-orange30;
+    font-size: $dc-font100;
     line-height: 1.5;
 }
 
-.dc-grid--padded {
+.dc-grid {
+    // Set the default paddings for each size
     padding: $dc-space50;
 
     @include breakpoint($dc-small-width) {
@@ -36,9 +37,6 @@ $breakpoint-names: "tiny" "small" "medium" "large" "huge" "giant" "monstrous";
     @include breakpoint($dc-monstrous-width) {
         padding: $dc-space200;
     }
-}
-
-.dc-grid {
 
     // For each breakpoint
     @for $j from 1 through length($breakpoints) {
@@ -55,32 +53,62 @@ $breakpoint-names: "tiny" "small" "medium" "large" "huge" "giant" "monstrous";
         // Add the media query
         @include breakpoint(nth($breakpoints, $j)) {
             // Set the layout on the grid itself
-            @include container(nth($layouts, $j));
+            //@include container(nth($layouts, $j));
+
+            // For each column size (1-12)
+            @for $i from 1 through 12 {
+                // Generate classes like .dc-large
+
+                .dc-span#{$i} {
+                    @include span($i of nth($layouts, $j));
+                }
+
+            }
+
+            .dc-last {
+                // Remove the margin from the default last column.
+                // It has to be here in the cascade to override columns bur
+                // be overridden by size specific classes.
+                margin-right: 0;
+            }
 
             // For each column size (1-12)
             @for $i from 1 through 12 {
                 // Generate classes like .dc-large-span4
+
                 .dc-#{nth($breakpoint-names, $j)}-span#{$i} {
                     @include span($i of nth($layouts, $j));
                 }
             }
+
         }
+
         // Add the media query
         @include breakpoint($mq) {
-            @for $i from 1 through 12 {
-                // Generate classes for last columns like .dc-large-last
-                .dc-#{nth($breakpoint-names, $j)}-last {
-                    // Reset last column to prevent line break
-                    @include last;
 
-                    // The first element of a new row must clear floats
-                    // otherwise rows could get messed up when columns
-                    // do not have the same height.
-                    + [class*='-span'] {
-                        clear: both;
-                    }
+            .dc-#{nth($breakpoint-names, $j)}-hide {
+                display: none;
+            }
+
+
+            // Generate classes for last columns like .dc-large-last
+            .dc-#{nth($breakpoint-names, $j)}-last {
+                // Reset last column to prevent line break
+                //@include last;
+                margin-right: 0;
+
+                // // The first element of a new row must clear floats
+                // // otherwise rows could get messed up when columns
+                // // do not have the same height.
+                + [class*='-span'] {
+                    clear: both;
                 }
             }
+
+            .dc-#{nth($breakpoint-names, $j)}-hide {
+                display: none;
+            }
+
         }
     }
 }

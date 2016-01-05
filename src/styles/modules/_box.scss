@@ -20,12 +20,17 @@
         padding-right: $dc-space150;
         padding-left: $dc-space150;
     }
+
+    &--bleed {
+        padding-right: 0;
+        padding-left: 0;
+    }
 }
 
-//  = THE STANDARD BOX
+//  = THE CARD
 //  ---------------------------------------------------------------------------
 
-.dc-box--card {
+.dc-card {
     @include bleed;
     margin-bottom: $dc-space150;
     padding-top: $dc-space100;
